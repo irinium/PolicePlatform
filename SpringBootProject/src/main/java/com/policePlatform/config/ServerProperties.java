@@ -2,13 +2,18 @@ package com.policePlatform.config;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Component
+
+
+@Configuration
+@PropertySource("classpath:db.yml")
 @ConfigurationProperties
 public  class ServerProperties{
 
