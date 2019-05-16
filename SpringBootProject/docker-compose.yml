@@ -1,0 +1,17 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+    command: --lower-case-table-names=1
+    ports:
+      - "3306:3306"
+    volumes:
+      - "database_data:/var/lib/mysql"
+volumes:
+  database_data:
