@@ -8,4 +8,6 @@ spring:
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
   flyway:
+    enabled: true
+    validate-on-migrate: false
     baseline-on-migrate: true
