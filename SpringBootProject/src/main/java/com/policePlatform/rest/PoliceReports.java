@@ -1,9 +1,20 @@
 package com.policePlatform.rest;
 
 import com.policePlatform.model.PoliceReport;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -30,14 +41,18 @@ public class PoliceReports {
 
     }
 
+    @Repository
+    @Transactional
+    public interface PoliceReportDAO extends CrudRepository<PoliceReport,Long>, JpaSpecificationExecutor<PoliceReport> {
+    }
     @GetMapping("/api/v1/police-reports/search")
-    public ResponseEntity<Set<PoliceReport>> searchPoliceReports(@RequestParam(value = "id", required = false) String idVal,
-                                                            @RequestParam(value = "EO", required = false) String EOVal,
-                                                            @RequestParam(value = "decision", required = false) String decisionVal,
-                                                            @RequestParam(value = "story", required = false) String storyVal,
-                                                            @RequestParam(value = "declarant", required = false) String declarantVal,
-                                                            @RequestParam(value = "commisionPlace", required = false) String commisionPlaceVal,
-                                                            @RequestParam(value = "fullName", required = false) String fullNameVal,
-                                                            @RequestParam(value = "results", required = false) String resultsVal) {}
+    public List<PoliceReport> findByCriteria(String policeReport){
+        return policeReport.findAll(new Specification<PoliceReport>() {
+            @Override
+            public Predicate toPredicate(Root<PoliceReport> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return null;
+            }
+        });
+    }
 
 }
