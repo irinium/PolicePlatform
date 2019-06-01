@@ -1,4 +1,4 @@
-package com.policePlatform.model;
+package com.policePlatform.domain.model;
 
 import javax.persistence.*;
 
