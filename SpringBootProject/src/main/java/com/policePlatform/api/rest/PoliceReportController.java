@@ -32,8 +32,8 @@ public class PoliceReportController {
     }
 
     @PostMapping
-    public PoliceReportResponse createPoliceReport(PoliceReportRequest request) {
-        throw new NotImplementedException();
+    public PoliceReportResponse createPoliceReport(@RequestBody PoliceReportRequest request) {
+        return policeReportService.createPoliceReport(request);
     }
 
     @GetMapping("/{id}")

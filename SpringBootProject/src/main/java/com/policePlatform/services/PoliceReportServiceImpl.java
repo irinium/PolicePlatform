@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
+import com.policePlatform.domain.model.PoliceReport;
 import com.policePlatform.domain.repositories.PoliceReportRepository;
 import com.policePlatform.exceptions.NotImplementedException;
 import com.policePlatform.mapping.PoliceReportsMapper;
@@ -35,7 +36,8 @@ public class PoliceReportServiceImpl implements PoliceReportService {
 
     @Override
     public PoliceReportResponse createPoliceReport(PoliceReportRequest request) {
-        throw new NotImplementedException();
+        PoliceReport policeReport = policeReportsMapper.toEntity(request);
+        return policeReportsMapper.toResponse(policeReportRepository.save(policeReport));
     }
 
     @Override
