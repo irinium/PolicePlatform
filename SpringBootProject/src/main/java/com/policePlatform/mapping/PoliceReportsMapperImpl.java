@@ -11,6 +11,7 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
     @Override
     public PoliceReportResponse toResponse(PoliceReport policeReport) {
         PoliceReportResponse response = new PoliceReportResponse();
+        response.setId(policeReport.getId()); // add getter and setter for id
         response.setEo(policeReport.getEo());
         response.setDecision(policeReport.getDecision());
         response.setStory(policeReport.getStory());

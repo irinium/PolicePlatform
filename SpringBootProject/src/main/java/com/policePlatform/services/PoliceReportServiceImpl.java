@@ -2,6 +2,7 @@ package com.policePlatform.services;
 
 import java.util.Collection;
 
+import com.policePlatform.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,8 @@ public class PoliceReportServiceImpl implements PoliceReportService {
 
     @Override
     public PoliceReportResponse getPoliceReport(Long id) {
-        throw new NotImplementedException();
+        return policeReportRepository.findById(id)
+                .map(policeReportsMapper::toResponse).orElseThrow(() -> new NotFoundException());
     }
 
     @Override
