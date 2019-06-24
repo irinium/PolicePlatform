@@ -16,4 +16,5 @@ public interface PoliceReportsMapper {
     }
 
     PoliceReport toEntity(PoliceReportRequest request);
+    void updateEntity(PoliceReport entity, PoliceReportRequest request);
 }

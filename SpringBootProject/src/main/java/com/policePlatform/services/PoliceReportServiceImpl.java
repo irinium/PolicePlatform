@@ -49,12 +49,16 @@ public class PoliceReportServiceImpl implements PoliceReportService {
 
     @Override
     public PoliceReportResponse updatePoliceReport(Long id, PoliceReportRequest request) {
-        throw new NotImplementedException();
+        PoliceReport entity = policeReportRepository.findById(id).orElseThrow(() -> new NotFoundException());
+        policeReportsMapper.updateEntity(entity, request);
+        policeReportRepository.save(entity);
+        return policeReportsMapper.toResponse(entity);
     }
 
     @Override
     public void deletePoliceReport(Long id) {
-        throw new NotImplementedException();
+        policeReportRepository.deleteById(id);
+
     }
 
     @Override

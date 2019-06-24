@@ -38,17 +38,17 @@ public class PoliceReportController {
 
     @GetMapping("/{id}")
     public PoliceReportResponse getPoliceReport(@PathVariable("id") Long id) {
-        throw new NotImplementedException();
+        return  policeReportService.getPoliceReport(id);
     }
 
     @PutMapping("/{id}")
     public PoliceReportResponse updatePoliceReport(@PathVariable("id") Long id, @RequestBody PoliceReportRequest request) {
-        throw new NotImplementedException();
+        return policeReportService.updatePoliceReport(id, request);
     }
 
     @DeleteMapping("/{id}")
     public void deletePoliceReport(@PathVariable("id") Long id) {
-        throw new NotImplementedException();
+        policeReportService.deletePoliceReport(id);
     }
 
     @GetMapping("/search")
