@@ -1,11 +1,10 @@
 package com.policePlatform.mapping;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public interface PoliceReportsMapper {
 
@@ -16,5 +15,6 @@ public interface PoliceReportsMapper {
     }
 
     PoliceReport toEntity(PoliceReportRequest request);
+
     void updateEntity(PoliceReport entity, PoliceReportRequest request);
 }

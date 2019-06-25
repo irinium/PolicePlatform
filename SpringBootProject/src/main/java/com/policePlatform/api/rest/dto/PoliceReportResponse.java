@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PoliceReportResponse {
+    Long id;
     Long eo;
     String decision;
     String story;

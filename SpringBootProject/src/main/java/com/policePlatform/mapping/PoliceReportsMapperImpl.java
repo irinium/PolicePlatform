@@ -1,16 +1,17 @@
 package com.policePlatform.mapping;
 
-import org.springframework.stereotype.Component;
-
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PoliceReportsMapperImpl implements PoliceReportsMapper {
+
     @Override
     public PoliceReportResponse toResponse(PoliceReport policeReport) {
         PoliceReportResponse response = new PoliceReportResponse();
+        response.setId(policeReport.getId());
         response.setEo(policeReport.getEo());
         response.setDecision(policeReport.getDecision());
         response.setStory(policeReport.getStory());
@@ -33,8 +34,9 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
         report.setResults(request.getResults());
         return report;
     }
+
     @Override
-    public void updateEntity(PoliceReport entity, PoliceReportRequest request){
+    public void updateEntity(PoliceReport entity, PoliceReportRequest request) {
         entity.setEo(request.getEo());
         entity.setDecision(request.getDecision());
         entity.setStory(request.getStory());
