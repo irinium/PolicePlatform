@@ -1,10 +1,9 @@
 package com.policePlatform.services;
 
-import java.util.Collection;
-
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
+import java.util.Collection;
 
 public interface PoliceReportService {
 
