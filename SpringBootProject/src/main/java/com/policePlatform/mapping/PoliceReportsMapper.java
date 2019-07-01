@@ -3,6 +3,8 @@ package com.policePlatform.mapping;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
+import org.springframework.data.domain.Page;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -17,4 +19,6 @@ public interface PoliceReportsMapper {
     PoliceReport toEntity(PoliceReportRequest request);
 
     void updateEntity(PoliceReport entity, PoliceReportRequest request);
+
+    Collection<PoliceReportResponse> toResponse(Page all);
 }

@@ -45,4 +45,5 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
         entity.setFullName(request.getFullName());
         entity.setResults(request.getResults());
     }
+
 }
