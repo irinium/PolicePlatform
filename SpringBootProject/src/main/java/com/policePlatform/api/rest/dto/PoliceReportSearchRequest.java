@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 public class PoliceReportSearchRequest {
 
     Long id;
+    Long assigneeId;
     Long eo;
     String decision;
     String story;

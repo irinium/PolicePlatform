@@ -9,10 +9,10 @@ import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceReportsMapper;
 import com.policePlatform.services.specifications.PoliceReportSearchSpecification;
 
-import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +59,8 @@ public class PoliceReportServiceImpl implements PoliceReportService {
     }
 
     @Override
-    public Collection<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest, Pageable pageable) {
-
-        return policeReportsMapper.toResponse(policeReportRepository.findAll(policeReportSearchSpecification.getSpecification(searchRequest), pageable));
+    public Page<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest, Pageable pageable) {
+        return policeReportRepository.findAll(policeReportSearchSpecification.getSpecification(searchRequest), pageable)
+                .map(policeReportsMapper::toResponse);
     }
 }

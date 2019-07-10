@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.annotation.Reference;
 
 @Entity
 @Table(name = "police_report")
@@ -19,6 +21,8 @@ public class PoliceReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @Column(name = "assignee_id")
+    Long assigneeId;
     Long eo;
     String decision;
     String story;
