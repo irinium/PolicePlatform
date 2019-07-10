@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PoliceReportSearchRequest {
 
-    Long id;
     Long assigneeId;
     Long eo;
     String decision;

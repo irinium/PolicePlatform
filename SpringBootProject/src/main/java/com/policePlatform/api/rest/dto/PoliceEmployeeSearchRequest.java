@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PoliceEmployeeSearchRequest {
-    Long id;
     String name;
     String lastName;
     String password;
