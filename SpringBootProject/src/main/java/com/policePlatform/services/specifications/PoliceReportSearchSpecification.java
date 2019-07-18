@@ -1,13 +1,10 @@
 package com.policePlatform.services.specifications;
 
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
-import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.model.PoliceReport;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +23,7 @@ public class PoliceReportSearchSpecification {
             ofNullable(searchRequest.getCommissionPlace()).map(commissionPlace -> criteriaBuilder.equal(root.get("commission_place"), commissionPlace)).ifPresent(predicates::add);
             ofNullable(searchRequest.getFullName()).map(fullName -> criteriaBuilder.equal(root.get("full_name"), fullName)).ifPresent(predicates::add);
             ofNullable(searchRequest.getResults()).map(results -> criteriaBuilder.equal(root.get("results"), results)).ifPresent(predicates::add);
-            //Join<PoliceReport, PoliceEmployee> rootJ = root.join("police_employee", JoinType.RIGHT);
-            //ofNullable(searchRequest.getAssigneeId()).map(assigneeId -> criteriaBuilder.equal(rootJ.get("assignee_id"), assigneeId)).ifPresent(predicates::add);
+            ofNullable(searchRequest.getAssigneeId()).map(assigneeId -> criteriaBuilder.equal(root.join("assignee_id"), assigneeId)).ifPresent(predicates::add);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
