@@ -12,7 +12,7 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
     public PoliceReportResponse toResponse(PoliceReport policeReport) {
         PoliceReportResponse response = new PoliceReportResponse();
         response.setId(policeReport.getId());
-        response.setAssigneeId(policeReport.getAssigneeId());
+        response.setAssignee(policeReport.getAssignee());
         response.setEo(policeReport.getEo());
         response.setDecision(policeReport.getDecision());
         response.setStory(policeReport.getStory());
@@ -26,7 +26,7 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
     @Override
     public PoliceReport toEntity(PoliceReportRequest request) {
         PoliceReport report = new PoliceReport();
-        report.setAssigneeId(request.getAssigneeId());
+        report.setAssignee(request.getAssignee());
         report.setEo(request.getEo());
         report.setDecision(request.getDecision());
         report.setStory(request.getStory());
@@ -39,7 +39,7 @@ public class PoliceReportsMapperImpl implements PoliceReportsMapper {
 
     @Override
     public void updateEntity(PoliceReport entity, PoliceReportRequest request) {
-        entity.setAssigneeId(request.getAssigneeId());
+        entity.setAssignee(request.getAssignee());
         entity.setEo(request.getEo());
         entity.setDecision(request.getDecision());
         entity.setStory(request.getStory());

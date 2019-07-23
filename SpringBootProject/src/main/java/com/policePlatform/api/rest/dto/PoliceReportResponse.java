@@ -1,5 +1,6 @@
 package com.policePlatform.api.rest.dto;
 
+import com.policePlatform.domain.model.PoliceEmployee;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PoliceReportResponse {
     Long id;
-    Long assigneeId;
+    PoliceEmployee assignee;
     Long eo;
     String decision;
     String story;

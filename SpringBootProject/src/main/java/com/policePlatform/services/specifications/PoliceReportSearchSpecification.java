@@ -23,7 +23,7 @@ public class PoliceReportSearchSpecification {
             ofNullable(searchRequest.getCommissionPlace()).map(commissionPlace -> criteriaBuilder.equal(root.get("commission_place"), commissionPlace)).ifPresent(predicates::add);
             ofNullable(searchRequest.getFullName()).map(fullName -> criteriaBuilder.equal(root.get("full_name"), fullName)).ifPresent(predicates::add);
             ofNullable(searchRequest.getResults()).map(results -> criteriaBuilder.equal(root.get("results"), results)).ifPresent(predicates::add);
-            ofNullable(searchRequest.getAssigneeId()).map(assigneeId -> criteriaBuilder.equal(root.join("assignee_id"), assigneeId)).ifPresent(predicates::add);
+            ofNullable(searchRequest.getAssignee()).map(assignee -> criteriaBuilder.equal(root.join("assignee_id"), assignee)).ifPresent(predicates::add);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
