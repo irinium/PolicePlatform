@@ -10,5 +10,4 @@ public class PoliceEmployeeResponse {
     Long id;
     String name;
     String lastName;
-    String password;
 }

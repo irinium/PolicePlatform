@@ -1,19 +1,22 @@
 package com.policePlatform.mapping;
 
+import org.springframework.stereotype.Component;
+
 import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.domain.model.PoliceEmployee;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PoliceEmployeeMapperImpl implements PoliceEmployeeMapper {
     @Override
     public PoliceEmployeeResponse toResponse(PoliceEmployee policeEmployee) {
+        if (policeEmployee == null) {
+            return null;
+        }
         PoliceEmployeeResponse response = new PoliceEmployeeResponse();
         response.setId(policeEmployee.getId());
         response.setLastName(policeEmployee.getLastName());
         response.setName(policeEmployee.getName());
-        response.setPassword(policeEmployee.getPassword());
         return response;
     }
 

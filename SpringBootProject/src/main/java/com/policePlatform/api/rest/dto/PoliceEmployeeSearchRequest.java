@@ -9,5 +9,4 @@ import lombok.experimental.FieldDefaults;
 public class PoliceEmployeeSearchRequest {
     String name;
     String lastName;
-    String password;
 }
