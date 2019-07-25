@@ -1,9 +1,11 @@
 package com.policePlatform.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
-import java.util.Collection;
 
 public interface PoliceReportService {
 
@@ -15,5 +17,5 @@ public interface PoliceReportService {
 
     void deletePoliceReport(Long id);
 
-    Collection<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest);
+    Page<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest, Pageable pageable);
 }

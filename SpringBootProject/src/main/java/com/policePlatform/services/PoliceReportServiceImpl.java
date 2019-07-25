@@ -1,5 +1,10 @@
 package com.policePlatform.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
@@ -8,11 +13,9 @@ import com.policePlatform.domain.repositories.PoliceReportRepository;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceReportsMapper;
 import com.policePlatform.services.specifications.PoliceReportSearchSpecification;
-import java.util.Collection;
+
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -24,8 +27,8 @@ public class PoliceReportServiceImpl implements PoliceReportService {
 
     @Autowired
     public PoliceReportServiceImpl(PoliceReportsMapper policeReportsMapper,
-        PoliceReportRepository policeReportRepository,
-        PoliceReportSearchSpecification policeReportSearchSpecification) {
+                                   PoliceReportRepository policeReportRepository,
+                                   PoliceReportSearchSpecification policeReportSearchSpecification) {
         this.policeReportsMapper = policeReportsMapper;
         this.policeReportRepository = policeReportRepository;
         this.policeReportSearchSpecification = policeReportSearchSpecification;
@@ -57,8 +60,8 @@ public class PoliceReportServiceImpl implements PoliceReportService {
     }
 
     @Override
-    public Collection<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest) {
-        return policeReportsMapper.toResponse(policeReportRepository.findAll(
-            policeReportSearchSpecification.getSpecification(searchRequest)));
+    public Page<PoliceReportResponse> searchPoliceReports(PoliceReportSearchRequest searchRequest, Pageable pageable) {
+        return policeReportRepository.findAll(policeReportSearchSpecification.getSpecification(searchRequest), pageable)
+                .map(policeReportsMapper::toResponse);
     }
 }

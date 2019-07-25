@@ -1,17 +1,27 @@
 package com.policePlatform.mapping;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PoliceReportsMapperImpl implements PoliceReportsMapper {
+
+    private final PoliceEmployeeMapper policeEmployeeMapper;
+
+    @Autowired
+    public PoliceReportsMapperImpl(PoliceEmployeeMapper policeEmployeeMapper) {
+        this.policeEmployeeMapper = policeEmployeeMapper;
+    }
 
     @Override
     public PoliceReportResponse toResponse(PoliceReport policeReport) {
         PoliceReportResponse response = new PoliceReportResponse();
         response.setId(policeReport.getId());
+        response.setAssignee(policeEmployeeMapper.toResponse(policeReport.getAssignee()));
         response.setEo(policeReport.getEo());
         response.setDecision(policeReport.getDecision());
         response.setStory(policeReport.getStory());

@@ -3,12 +3,13 @@ package com.policePlatform.api.rest;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
-import com.policePlatform.exceptions.NotImplementedException;
 import com.policePlatform.services.PoliceReportService;
-import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +53,9 @@ public class PoliceReportController {
     }
 
     @GetMapping("/search")
-    public List<PoliceReportResponse> search(PoliceReportSearchRequest searchRequest) {
-        throw new NotImplementedException();
+    public Page<PoliceReportResponse> search(PoliceReportSearchRequest searchRequest, Pageable pageable) {
+        return policeReportService.searchPoliceReports(searchRequest, pageable);
     }
+
+
 }
