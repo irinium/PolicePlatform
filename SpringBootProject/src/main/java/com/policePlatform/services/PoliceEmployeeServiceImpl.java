@@ -5,29 +5,47 @@ import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
 import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
+import com.policePlatform.exceptions.CustomException;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
+import com.policePlatform.security.jwt.JwtTokenProvider;
 import com.policePlatform.services.specifications.PoliceEmployeeSearchSpecification;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PoliceEmployeeServiceImpl implements PoliceEmployeeService{
+public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
 
     PoliceEmployeeMapper policeEmployeeMapper;
     PoliceEmployeeRepository policeEmployeeRepository;
     PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification;
+    AuthenticationManager authenticationManager;
+    JwtTokenProvider jwtTokenProvider;
+    PasswordEncoder passwordEncoder;
 
-    public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper,
-            PoliceEmployeeRepository policeEmployeeRepository,
-            PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification){
+    @Autowired
+    public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper
+            ,PoliceEmployeeRepository policeEmployeeRepository
+            ,PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification
+            ,AuthenticationManager authenticationManager
+            ,JwtTokenProvider jwtTokenProvider
+            ,PasswordEncoder passwordEncoder){
         this.policeEmployeeMapper = policeEmployeeMapper;
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
 
     }
     @Override
@@ -37,8 +55,35 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService{
     }
 
     @Override
+    public String signin(String uuid, String password) {
+       try {
+           authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(uuid, password));
+           return jwtTokenProvider.createToken(uuid, policeEmployeeRepository.findByUuid(uuid).get().getRoles());
+       }catch (AuthenticationException e){
+           throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+       }
+    }
+
+    @Override
+    public String signup(PoliceEmployee employee) {
+        if (!policeEmployeeRepository.existsByUuid(employee.getUuid())) {
+            employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+            policeEmployeeRepository.save(employee);
+            return jwtTokenProvider.createToken(employee.getUuid(), employee.getRoles());
+        } else {
+            throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    @Override
     public PoliceEmployeeResponse getPoliceEmployee(Long id) {
         return policeEmployeeRepository.findById(id)
+                .map(policeEmployeeMapper::toResponse).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public PoliceEmployeeResponse getPoliceEmployeeUuid(String uuid) {
+        return policeEmployeeRepository.findByUuid(uuid)
                 .map(policeEmployeeMapper::toResponse).orElseThrow(NotFoundException::new);
     }
 

@@ -6,6 +6,8 @@ import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.domain.model.PoliceEmployee;
 
+import java.util.UUID;
+
 @Component
 public class PoliceEmployeeMapperImpl implements PoliceEmployeeMapper {
     @Override
@@ -15,6 +17,7 @@ public class PoliceEmployeeMapperImpl implements PoliceEmployeeMapper {
         }
         PoliceEmployeeResponse response = new PoliceEmployeeResponse();
         response.setId(policeEmployee.getId());
+        response.setUuid(policeEmployee.getUuid());
         response.setLastName(policeEmployee.getLastName());
         response.setName(policeEmployee.getName());
         return response;
@@ -23,6 +26,7 @@ public class PoliceEmployeeMapperImpl implements PoliceEmployeeMapper {
     @Override
     public PoliceEmployee toEntity(PoliceEmployeeRequest request) {
         PoliceEmployee employee = new PoliceEmployee();
+        employee.setUuid(UUID.randomUUID().toString());
         employee.setLastName(request.getLastName());
         employee.setName(request.getName());
         employee.setPassword(request.getPassword());

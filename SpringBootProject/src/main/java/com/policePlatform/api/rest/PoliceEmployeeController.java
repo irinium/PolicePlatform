@@ -1,5 +1,6 @@
 package com.policePlatform.api.rest;
 
+import com.policePlatform.domain.model.PoliceEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,16 @@ public class PoliceEmployeeController {
     @PostMapping
     public PoliceEmployeeResponse createPoliceEmployee(@RequestBody PoliceEmployeeRequest request) {
         return policeEmployeeServise.createPoliceEmployee(request);
+    }
+
+    @PostMapping("/signin")
+    public String signin(String uuid, String password){
+        return policeEmployeeServise.signin(uuid, password);
+    }
+
+    @PostMapping("/signup")
+    public String signup(@RequestBody PoliceEmployee employee){
+        return policeEmployeeServise.signup(employee);
     }
 
     @GetMapping("/{id}")
