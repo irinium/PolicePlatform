@@ -10,9 +10,6 @@ import org.springframework.data.domain.Pageable;
 public interface PoliceEmployeeService {
     PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request);
 
-    String signin(String uuid, String password);
-    String signup(PoliceEmployee employee);
-
     PoliceEmployeeResponse getPoliceEmployee(Long id);
 
     PoliceEmployeeResponse getPoliceEmployeeUuid(String uuid);

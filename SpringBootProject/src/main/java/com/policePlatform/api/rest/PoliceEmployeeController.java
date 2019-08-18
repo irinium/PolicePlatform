@@ -37,16 +37,6 @@ public class PoliceEmployeeController {
         return policeEmployeeServise.createPoliceEmployee(request);
     }
 
-    @PostMapping("/signin")
-    public String signin(String uuid, String password){
-        return policeEmployeeServise.signin(uuid, password);
-    }
-
-    @PostMapping("/signup")
-    public String signup(@RequestBody PoliceEmployee employee){
-        return policeEmployeeServise.signup(employee);
-    }
-
     @GetMapping("/{id}")
     public PoliceEmployeeResponse getPoliceEmployee(@PathVariable("id") Long id) {
         return policeEmployeeServise.getPoliceEmployee(id);

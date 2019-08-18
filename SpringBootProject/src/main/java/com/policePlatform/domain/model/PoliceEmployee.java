@@ -27,7 +27,8 @@ import static java.util.stream.Collectors.toList;
 @Table(name = "police_employee")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PoliceEmployee implements UserDetails {
+//implements UserDetails
+public class PoliceEmployee  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -42,38 +43,38 @@ public class PoliceEmployee implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     List<Role> roles;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(role ->
-                new SimpleGrantedAuthority(role.getRoleName())).collect(toList());
-    }
-    @Override
-    public String getPassword(){
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.uuid;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return this.roles.stream().map(role ->
+//                new SimpleGrantedAuthority(role.getRoleName())).collect(toList());
+//    }
+//    @Override
+//    public String getPassword(){
+//        return this.password;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return this.uuid;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

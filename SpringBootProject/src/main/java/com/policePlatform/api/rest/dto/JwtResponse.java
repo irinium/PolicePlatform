@@ -6,8 +6,12 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationRequest {
+public class JwtResponse {
 
-    String uuid;
-    String password;
+    String token;
+    String type = "Bearer";
+
+    public  JwtResponse(String token){
+        this.token = token;
+    }
 }

@@ -8,7 +8,7 @@ import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
 import com.policePlatform.exceptions.CustomException;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
-import com.policePlatform.security.jwt.JwtTokenProvider;
+import com.policePlatform.security.jwt.JwtProvider;
 import com.policePlatform.services.specifications.PoliceEmployeeSearchSpecification;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -30,16 +30,16 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     PoliceEmployeeRepository policeEmployeeRepository;
     PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification;
     AuthenticationManager authenticationManager;
-    JwtTokenProvider jwtTokenProvider;
+    JwtProvider jwtTokenProvider;
     PasswordEncoder passwordEncoder;
 
     @Autowired
     public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper
-            ,PoliceEmployeeRepository policeEmployeeRepository
-            ,PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification
-            ,AuthenticationManager authenticationManager
-            ,JwtTokenProvider jwtTokenProvider
-            ,PasswordEncoder passwordEncoder){
+            , PoliceEmployeeRepository policeEmployeeRepository
+            , PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification
+            , AuthenticationManager authenticationManager
+            , JwtProvider jwtTokenProvider
+            , PasswordEncoder passwordEncoder){
         this.policeEmployeeMapper = policeEmployeeMapper;
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
@@ -52,27 +52,6 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
         return policeEmployeeMapper.toResponse(policeEmployeeRepository.save(policeEmployee));
-    }
-
-    @Override
-    public String signin(String uuid, String password) {
-       try {
-           authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(uuid, password));
-           return jwtTokenProvider.createToken(uuid, policeEmployeeRepository.findByUuid(uuid).get().getRoles());
-       }catch (AuthenticationException e){
-           throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
-       }
-    }
-
-    @Override
-    public String signup(PoliceEmployee employee) {
-        if (!policeEmployeeRepository.existsByUuid(employee.getUuid())) {
-            employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-            policeEmployeeRepository.save(employee);
-            return jwtTokenProvider.createToken(employee.getUuid(), employee.getRoles());
-        } else {
-            throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
-        }
     }
 
     @Override
