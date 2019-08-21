@@ -2,8 +2,10 @@ package com.policePlatform.api.rest;
 
 import com.policePlatform.api.rest.dto.JwtResponse;
 import com.policePlatform.api.rest.dto.LoginForm;
+import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
 import com.policePlatform.security.jwt.JwtProvider;
+import com.policePlatform.services.PoliceEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,31 +29,13 @@ import javax.validation.Valid;
 public class AuthRestAPIs {
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    PoliceEmployeeRepository policeEmployeeRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtProvider jwtProvider;
+    PoliceEmployeeService policeEmployeeService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUuid(),
-                        loginRequest.getPassword()
-                )
-        );
+        return policeEmployeeService.authenticateUser(loginRequest);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
 

@@ -1,11 +1,12 @@
 package com.policePlatform.services;
 
+import com.policePlatform.api.rest.dto.JwtResponse;
+import com.policePlatform.api.rest.dto.LoginForm;
 import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
 import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
-import com.policePlatform.exceptions.CustomException;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
 import com.policePlatform.security.jwt.JwtProvider;
@@ -15,10 +16,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     PoliceEmployeeRepository policeEmployeeRepository;
     PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification;
     AuthenticationManager authenticationManager;
-    JwtProvider jwtTokenProvider;
+    JwtProvider jwtProvider;
     PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -44,9 +46,8 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
         this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
-
     }
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
@@ -61,10 +62,19 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     }
 
     @Override
-    public PoliceEmployeeResponse getPoliceEmployeeUuid(String uuid) {
-        return policeEmployeeRepository.findByUuid(uuid)
-                .map(policeEmployeeMapper::toResponse).orElseThrow(NotFoundException::new);
+    public ResponseEntity<?> authenticateUser(LoginForm loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUuid(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtProvider.generateJwtToken(authentication);
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
+
 
     @Override
     public PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request) {
