@@ -77,7 +77,7 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     @Override
     public PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request) {
         PoliceEmployee entity = policeEmployeeRepository.findById(id).orElseThrow(NotFoundException::new);
-        policeEmployeeMapper.updateEntity(entity, request);
+        policeEmployeeMapper.updateEntity(entity, request, passwordEncoder.encode(request.getPassword()));
         policeEmployeeRepository.save(entity);
         return policeEmployeeMapper.toResponse(entity);
     }

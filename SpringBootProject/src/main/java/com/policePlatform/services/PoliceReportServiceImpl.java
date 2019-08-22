@@ -49,7 +49,7 @@ public class PoliceReportServiceImpl implements PoliceReportService {
     @Override
     public PoliceReportResponse updatePoliceReport(Long id, PoliceReportRequest request) {
         PoliceReport entity = policeReportRepository.findById(id).orElseThrow(NotFoundException::new);
-        policeReportsMapper.updateEntity(entity, request);
+        entity = policeReportsMapper.updateEntity(entity, request);
         policeReportRepository.save(entity);
         return policeReportsMapper.toResponse(entity);
     }
