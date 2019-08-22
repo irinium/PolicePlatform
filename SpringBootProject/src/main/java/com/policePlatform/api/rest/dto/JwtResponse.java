@@ -11,7 +11,7 @@ public class JwtResponse {
     String token;
     String type = "Bearer";
 
-    public  JwtResponse(String token){
+    public JwtResponse(String token) {
         this.token = token;
     }
 }

@@ -36,12 +36,10 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper
-            , PoliceEmployeeRepository policeEmployeeRepository
-            , PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification
-            , AuthenticationManager authenticationManager
-            , JwtProvider jwtTokenProvider
-            , PasswordEncoder passwordEncoder){
+    public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper,
+        PoliceEmployeeRepository policeEmployeeRepository,
+        PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification,
+        AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
         this.policeEmployeeMapper = policeEmployeeMapper;
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
@@ -49,6 +47,7 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
         this.jwtProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
     }
+
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
@@ -58,17 +57,16 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     @Override
     public PoliceEmployeeResponse getPoliceEmployee(Long id) {
         return policeEmployeeRepository.findById(id)
-                .map(policeEmployeeMapper::toResponse).orElseThrow(NotFoundException::new);
+            .map(policeEmployeeMapper::toResponse).orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public ResponseEntity<?> authenticateUser(LoginForm loginRequest) {
-
+    public ResponseEntity<JwtResponse> authenticateUser(LoginForm loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUuid(),
-                        loginRequest.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUuid(),
+                loginRequest.getPassword()
+            )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateJwtToken(authentication);
@@ -90,8 +88,10 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     }
 
     @Override
-    public Page<PoliceEmployeeResponse> searchPoliceEmployee(PoliceEmployeeSearchRequest searchRequest, Pageable pageable) {
-        return policeEmployeeRepository.findAll(policeEmployeeSearchSpecification.getSpecification(searchRequest), pageable)
-                .map(policeEmployeeMapper::toResponse);
+    public Page<PoliceEmployeeResponse> searchPoliceEmployee(PoliceEmployeeSearchRequest searchRequest,
+        Pageable pageable) {
+        return policeEmployeeRepository
+            .findAll(policeEmployeeSearchSpecification.getSpecification(searchRequest), pageable)
+            .map(policeEmployeeMapper::toResponse);
     }
 }

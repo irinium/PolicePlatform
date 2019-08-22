@@ -1,11 +1,12 @@
 package com.policePlatform.config;
 
-import com.policePlatform.security.JwtUserDetails;
+import com.policePlatform.security.JwtUserDetailsService;
 import com.policePlatform.security.jwt.JwtAuthEntryPoint;
 import com.policePlatform.security.jwt.JwtAuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,11 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        prePostEnabled = true
+    prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-    JwtUserDetails jwtUserDetails;
+    JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private JwtAuthEntryPoint unauthorizedHandler;
@@ -37,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(jwtUserDetails)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(jwtUserDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -54,14 +56,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/v1/police-employee/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/api/v1/police-reports").permitAll()
+            .antMatchers("/api/auth/**").permitAll()
+            .anyRequest().authenticated()
+            .and().cors()
+            .and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
