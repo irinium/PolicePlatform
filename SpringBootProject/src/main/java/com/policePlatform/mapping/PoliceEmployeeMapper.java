@@ -5,6 +5,7 @@ import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.domain.model.PoliceEmployee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PoliceEmployeeMapper {
@@ -15,10 +16,9 @@ public interface PoliceEmployeeMapper {
     @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID().toString())")
     PoliceEmployee toEntity(PoliceEmployeeRequest request);
 
-    default PoliceEmployee updateEntity(PoliceEmployee entity, PoliceEmployeeRequest request, String encodedPassword) {
-        entity.setLastName(request.getLastName());
-        entity.setName(request.getName());
-        entity.setPassword(encodedPassword);
-        return entity;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "password", source = "encodedPassword")
+    PoliceEmployee updateEntity(@MappingTarget PoliceEmployee entity, PoliceEmployeeRequest request,
+        String encodedPassword);
 }
