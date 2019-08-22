@@ -1,11 +1,8 @@
 package com.policePlatform.mapping;
 
-
 import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.domain.model.PoliceEmployee;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,10 +10,6 @@ import org.mapstruct.Mapping;
 public interface PoliceEmployeeMapper {
 
     PoliceEmployeeResponse toResponse(PoliceEmployee policeEmployee);
-
-    default Collection<PoliceEmployeeResponse> toResponse(Collection<PoliceEmployee> employees) {
-        return employees.stream().map(this::toResponse).collect(Collectors.toList());
-    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID().toString())")
