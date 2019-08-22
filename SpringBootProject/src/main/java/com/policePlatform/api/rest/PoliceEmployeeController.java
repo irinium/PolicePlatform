@@ -1,5 +1,6 @@
 package com.policePlatform.api.rest;
 
+import com.policePlatform.domain.model.PoliceEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

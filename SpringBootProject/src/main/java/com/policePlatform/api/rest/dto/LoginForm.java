@@ -1,18 +1,17 @@
 package com.policePlatform.api.rest.dto;
 
-import com.policePlatform.domain.model.Role;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PoliceEmployeeRequest {
+public class LoginForm {
+
+    @NotBlank
     String uuid;
-    String name;
-    String lastName;
+    @NotBlank
     String password;
-    List<Role> roles;
 }
