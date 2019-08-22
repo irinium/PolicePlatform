@@ -56,6 +56,4 @@ public class PoliceReportController {
     public Page<PoliceReportResponse> search(PoliceReportSearchRequest searchRequest, Pageable pageable) {
         return policeReportService.searchPoliceReports(searchRequest, pageable);
     }
-
-
 }

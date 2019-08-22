@@ -10,20 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class JwtUserDetails implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     PoliceEmployeeRepository policeEmployeeRepository;
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        PoliceEmployee user = policeEmployeeRepository.findByUuid(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User Not Found with -> username or email : " + username)
-                );
+        PoliceEmployee user = policeEmployeeRepository.findByUuid(username).orElseThrow(() ->
+            new UsernameNotFoundException("User Not Found with -> username or email : " + username));
 
         return UserPrinciple.build(user);
     }

@@ -1,6 +1,11 @@
 package com.policePlatform.api.rest;
 
-import com.policePlatform.domain.model.PoliceEmployee;
+import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
+import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
+import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
+import com.policePlatform.services.PoliceEmployeeService;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,18 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
-import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
-import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
-import com.policePlatform.services.PoliceEmployeeService;
-
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-
 @RestController
 @RequestMapping("/api/v1/police-employee")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PoliceEmployeeController {
+
     PoliceEmployeeService policeEmployeeServise;
 
     @Autowired
@@ -44,7 +42,7 @@ public class PoliceEmployeeController {
 
     @PutMapping("/{id}")
     public PoliceEmployeeResponse updatePoliceEmployee(@PathVariable("id") Long id,
-                                                       @RequestBody PoliceEmployeeRequest request) {
+        @RequestBody PoliceEmployeeRequest request) {
         return policeEmployeeServise.updatePoliceEmployee(id, request);
     }
 
