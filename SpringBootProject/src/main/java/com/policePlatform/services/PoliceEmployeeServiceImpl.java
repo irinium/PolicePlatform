@@ -6,7 +6,9 @@ import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
 import com.policePlatform.domain.model.PoliceEmployee;
+import com.policePlatform.domain.model.Role;
 import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
+import com.policePlatform.domain.repositories.RoleRepository;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
 import com.policePlatform.security.jwt.JwtProvider;
@@ -50,6 +52,7 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
 
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
         return policeEmployeeMapper.toResponse(policeEmployeeRepository.save(policeEmployee));
     }
@@ -77,6 +80,13 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     @Override
     public PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request) {
         PoliceEmployee entity = policeEmployeeRepository.findById(id).orElseThrow(NotFoundException::new);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String uuid = authentication.getName();
+
+        if (!uuid.equals(entity.getUuid())){
+            return null;
+        }
+
         policeEmployeeMapper.updateEntity(entity, request, passwordEncoder.encode(request.getPassword()));
         policeEmployeeRepository.save(entity);
         return policeEmployeeMapper.toResponse(entity);
