@@ -3,19 +3,20 @@ package com.policePlatform.mapping;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
+@Mapper(componentModel = "spring")
 public interface PoliceReportsMapper {
 
     PoliceReportResponse toResponse(PoliceReport policeReport);
 
-    default Collection<PoliceReportResponse> toResponse(Collection<PoliceReport> reports) {
-        return reports.stream().map(this::toResponse).collect(Collectors.toList());
-    }
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "assignee", ignore = true)
     PoliceReport toEntity(PoliceReportRequest request);
 
-    void updateEntity(PoliceReport entity, PoliceReportRequest request);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "assignee", ignore = true)
+    PoliceReport updateEntity(@MappingTarget PoliceReport entity, PoliceReportRequest request);
 }
