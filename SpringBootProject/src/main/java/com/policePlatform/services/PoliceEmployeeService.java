@@ -20,12 +20,12 @@ public interface PoliceEmployeeService {
 
     ResponseEntity<JwtResponse> authenticateUser(LoginForm loginRequest);
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_EMPLOYEE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')")
     PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request);
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     void deletePoliceEmployee(Long id);
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_EMPLOYEE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')")
     Page<PoliceEmployeeResponse> searchPoliceEmployee(PoliceEmployeeSearchRequest searchRequest, Pageable pageable);
 }
