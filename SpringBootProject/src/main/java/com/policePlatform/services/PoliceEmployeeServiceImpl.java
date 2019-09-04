@@ -6,7 +6,9 @@ import com.policePlatform.api.rest.dto.PoliceEmployeeRequest;
 import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.api.rest.dto.PoliceEmployeeSearchRequest;
 import com.policePlatform.domain.model.PoliceEmployee;
+import com.policePlatform.domain.model.Role;
 import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
+import com.policePlatform.domain.repositories.RoleRepository;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
 import com.policePlatform.mapping.PoliceEmployeeMapperImpl;
@@ -25,6 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
@@ -35,21 +39,26 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     AuthenticationManager authenticationManager;
     JwtProvider jwtProvider;
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
     @Autowired
     public PoliceEmployeeServiceImpl(PoliceEmployeeRepository policeEmployeeRepository,
         PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification,
-        AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+        AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.policeEmployeeMapper = new PoliceEmployeeMapperImpl();
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        List<Role> role = roleRepository.findByRoleNameIn(request.getRoles());
+        request.setRoles(policeEmployeeMapper.toResponse(role));
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
         return policeEmployeeMapper.toResponse(policeEmployeeRepository.save(policeEmployee));
     }
@@ -77,6 +86,13 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     @Override
     public PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request) {
         PoliceEmployee entity = policeEmployeeRepository.findById(id).orElseThrow(NotFoundException::new);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String uuid = authentication.getName();
+
+        if (!uuid.equals(entity.getUuid())){
+            return null;
+        }
+
         policeEmployeeMapper.updateEntity(entity, request, passwordEncoder.encode(request.getPassword()));
         policeEmployeeRepository.save(entity);
         return policeEmployeeMapper.toResponse(entity);

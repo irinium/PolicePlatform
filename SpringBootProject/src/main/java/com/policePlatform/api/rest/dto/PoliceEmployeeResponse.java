@@ -14,5 +14,5 @@ public class PoliceEmployeeResponse {
     String uuid;
     String name;
     String lastName;
-    List<Role> roles;
+    List<String> roles;
 }

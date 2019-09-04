@@ -13,5 +13,5 @@ public class PoliceEmployeeRequest {
     String name;
     String lastName;
     String password;
-    List<Role> roles;
+    List<String> roles;
 }
