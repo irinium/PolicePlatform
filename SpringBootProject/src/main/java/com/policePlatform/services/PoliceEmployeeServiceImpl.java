@@ -26,6 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
@@ -36,23 +38,27 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     AuthenticationManager authenticationManager;
     JwtProvider jwtProvider;
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
     @Autowired
     public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper,
         PoliceEmployeeRepository policeEmployeeRepository,
         PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification,
-        AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+        AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.policeEmployeeMapper = policeEmployeeMapper;
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
+        List<Role> role = roleRepository.findByRoleNameIn(request.getRoles());
+        request.setRoles(policeEmployeeMapper.toResponse(role));
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
         return policeEmployeeMapper.toResponse(policeEmployeeRepository.save(policeEmployee));
     }

@@ -35,6 +35,11 @@ public class PoliceEmployeeController {
         return policeEmployeeServise.createPoliceEmployee(request);
     }
 
+//    @PostMapping("/role/{id}")
+//    PoliceEmployeeResponse addRoleEmployee(@PathVariable("id") Long id){
+//        return  policeEmployeeServise.addRoleEmployee(id);
+//    }
+
     @GetMapping("/{id}")
     public PoliceEmployeeResponse getPoliceEmployee(@PathVariable("id") Long id) {
         return policeEmployeeServise.getPoliceEmployee(id);
