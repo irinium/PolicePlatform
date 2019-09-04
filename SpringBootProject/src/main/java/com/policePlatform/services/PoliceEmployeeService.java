@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public interface PoliceEmployeeService {
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request);
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -18,9 +20,12 @@ public interface PoliceEmployeeService {
 
     ResponseEntity<JwtResponse> authenticateUser(LoginForm loginRequest);
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_EMPLOYEE')")
     PoliceEmployeeResponse updatePoliceEmployee(Long id, PoliceEmployeeRequest request);
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     void deletePoliceEmployee(Long id);
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_EMPLOYEE')")
     Page<PoliceEmployeeResponse> searchPoliceEmployee(PoliceEmployeeSearchRequest searchRequest, Pageable pageable);
 }
