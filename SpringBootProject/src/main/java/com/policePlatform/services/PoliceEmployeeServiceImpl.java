@@ -11,6 +11,7 @@ import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
 import com.policePlatform.domain.repositories.RoleRepository;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceEmployeeMapper;
+import com.policePlatform.mapping.PoliceEmployeeMapperImpl;
 import com.policePlatform.security.jwt.JwtProvider;
 import com.policePlatform.services.specifications.PoliceEmployeeSearchSpecification;
 import lombok.AccessLevel;
@@ -41,11 +42,10 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     RoleRepository roleRepository;
 
     @Autowired
-    public PoliceEmployeeServiceImpl(PoliceEmployeeMapper policeEmployeeMapper,
-        PoliceEmployeeRepository policeEmployeeRepository,
+    public PoliceEmployeeServiceImpl(PoliceEmployeeRepository policeEmployeeRepository,
         PoliceEmployeeSearchSpecification policeEmployeeSearchSpecification,
         AuthenticationManager authenticationManager, JwtProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-        this.policeEmployeeMapper = policeEmployeeMapper;
+        this.policeEmployeeMapper = new PoliceEmployeeMapperImpl();
         this.policeEmployeeRepository = policeEmployeeRepository;
         this.policeEmployeeSearchSpecification = policeEmployeeSearchSpecification;
         this.authenticationManager = authenticationManager;

@@ -4,5 +4,6 @@ CREATE TABLE roles_permissions
 );
 
 ALTER TABLE roles_permissions
-    ADD CONSTRAINT FOREIGN KEY (role_id) REFERENCES roles(id),
-    ADD CONSTRAINT FOREIGN KEY (permission_id) REFERENCES permissions(id);
+    ADD CONSTRAINT fk_roles_permissions_roles FOREIGN KEY (role_id) REFERENCES roles(id);
+ALTER TABLE roles_permissions
+    ADD CONSTRAINT fk_roles_permissions_roles_permissions FOREIGN KEY (permission_id) REFERENCES permissions(id);

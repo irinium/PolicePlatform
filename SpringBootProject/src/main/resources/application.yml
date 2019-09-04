@@ -23,3 +23,15 @@ security:
 #    org.springframework.security: DEBUG
 #    com.example: DEBUG
 #  file: app.log
+
+---
+
+spring:
+  profiles: e2e
+  datasource:
+    url: jdbc:h2:mem:messages;MODE=MySQL
+    driver-class-name: org.h2.Driver
+  jpa:
+    database: mysql
+  flyway:
+    enabled: true
