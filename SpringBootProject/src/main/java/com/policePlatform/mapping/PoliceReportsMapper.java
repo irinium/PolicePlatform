@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface PoliceReportsMapper {
 
     PoliceReportResponse toResponse(PoliceReport policeReport);

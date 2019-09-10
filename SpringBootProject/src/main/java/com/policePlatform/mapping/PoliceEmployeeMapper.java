@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface PoliceEmployeeMapper {
 
     List<String> toResponse(List<Role> roles);
