@@ -15,6 +15,10 @@ public interface PoliceEmployeeService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request);
 
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    PoliceEmployeeResponse addRole(Long id, PoliceEmployeeRequest request);
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     PoliceEmployeeResponse getPoliceEmployee(Long id);
 
