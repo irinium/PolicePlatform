@@ -1,12 +1,18 @@
 package unit;
 
+import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
+import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.domain.model.PoliceReport;
 import com.policePlatform.domain.repositories.PoliceReportRepository;
 import com.policePlatform.services.PoliceReportServiceImpl;
@@ -62,5 +68,50 @@ public class PoliceReportsServiceTest {
         assertThat(actual.getCommissionPlace(), equalTo(commissionPlace));
         assertThat(actual.getFullName(), equalTo(fullName));
         assertThat(actual.getResults(), equalTo(results));
+    }
+
+    @Test
+    public void getPoliceReportTest(){
+
+        final PoliceReport report = new PoliceReport();
+        report.setId(1L);
+        report.setDecision("decision");
+
+        when(policeReportRepository.findById(report.getId())).thenReturn(of(report));
+        final PoliceReportResponse response = policeReportService.getPoliceReport(report.getId());
+
+        assertThat(report.getId(), equalTo(response.getId()));
+        assertThat(report.getDecision(), equalTo(response.getDecision()));
+
+    }
+
+    @Test
+    public void updatePoliceReportTest(){
+        final PoliceReport report = new PoliceReport();
+        report.setId(1L);
+        report.setDecision("decision");
+        report.setStory("story");
+
+        final String story = "update";
+        final PoliceReportRequest request = new PoliceReportRequest()
+                .setStory(story);
+
+        when(policeReportRepository.findById(report.getId())).thenReturn(of(report));
+        when(policeReportRepository.save(policeReportCaptor.capture())).then(invocation -> invocation.getArgument(0));
+        policeReportService.updatePoliceReport(report.getId(), request);
+
+        final PoliceReport actual = policeReportCaptor.getValue();
+
+        assertThat(actual, equalTo(report));
+
+    }
+
+    @Test
+    public void deletePoliceReportTest(){
+        final Long id = 1L;
+
+        policeReportService.deletePoliceReport(id);
+        verify(policeReportRepository, times(1)).deleteById(eq(id));
+
     }
 }
