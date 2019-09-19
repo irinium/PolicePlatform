@@ -3,7 +3,9 @@ package com.policePlatform.services;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
 import com.policePlatform.api.rest.dto.PoliceReportSearchRequest;
+import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.model.PoliceReport;
+import com.policePlatform.domain.repositories.PoliceEmployeeRepository;
 import com.policePlatform.domain.repositories.PoliceReportRepository;
 import com.policePlatform.exceptions.NotFoundException;
 import com.policePlatform.mapping.PoliceReportsMapper;
@@ -23,18 +25,23 @@ public class PoliceReportServiceImpl implements PoliceReportService {
     PoliceReportsMapper policeReportsMapper;
     PoliceReportRepository policeReportRepository;
     PoliceReportSearchSpecification policeReportSearchSpecification;
+    PoliceEmployeeRepository policeEmployeeRepository;
 
     @Autowired
     public PoliceReportServiceImpl(PoliceReportRepository policeReportRepository,
-        PoliceReportSearchSpecification policeReportSearchSpecification) {
+        PoliceReportSearchSpecification policeReportSearchSpecification,
+        PoliceEmployeeRepository policeEmployeeRepository) {
         this.policeReportsMapper = new PoliceReportsMapperImpl();
         this.policeReportRepository = policeReportRepository;
         this.policeReportSearchSpecification = policeReportSearchSpecification;
+        this.policeEmployeeRepository = policeEmployeeRepository;
     }
 
     @Override
     public PoliceReportResponse createPoliceReport(PoliceReportRequest request) {
+        PoliceEmployee employee = policeEmployeeRepository.findById(request.getAssignee()).orElseThrow(NotFoundException::new);
         PoliceReport policeReport = policeReportsMapper.toEntity(request);
+        policeReport.setAssignee(employee);
         return policeReportsMapper.toResponse(policeReportRepository.save(policeReport));
     }
 

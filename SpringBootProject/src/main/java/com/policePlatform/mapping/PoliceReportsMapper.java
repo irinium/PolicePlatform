@@ -1,7 +1,9 @@
 package com.policePlatform.mapping;
 
+import com.policePlatform.api.rest.dto.PoliceEmployeeResponse;
 import com.policePlatform.api.rest.dto.PoliceReportRequest;
 import com.policePlatform.api.rest.dto.PoliceReportResponse;
+import com.policePlatform.domain.model.PoliceEmployee;
 import com.policePlatform.domain.model.PoliceReport;
 import com.policePlatform.domain.model.Role;
 import org.mapstruct.Mapper;
