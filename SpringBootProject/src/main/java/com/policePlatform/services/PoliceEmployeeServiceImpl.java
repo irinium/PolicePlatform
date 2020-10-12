@@ -27,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,10 +58,17 @@ public class PoliceEmployeeServiceImpl implements PoliceEmployeeService {
     @Override
     public PoliceEmployeeResponse createPoliceEmployee(PoliceEmployeeRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-        List<Role> role = roleRepository.findByRoleNameIn(request.getRoles());
-        request.setRoles(policeEmployeeMapper.toResponse(role));
         PoliceEmployee policeEmployee = policeEmployeeMapper.toEntity(request);
         return policeEmployeeMapper.toResponse(policeEmployeeRepository.save(policeEmployee));
+    }
+
+    @Override
+    public PoliceEmployeeResponse addRole(Long id, PoliceEmployeeRequest employee) {
+        PoliceEmployee entity =  policeEmployeeRepository.findById(id).orElseThrow(NotFoundException::new);
+        List<Role> roles = new ArrayList<>(roleRepository.findByRoleNameIn(employee.getRoles()));
+        entity.setRoles(roles);
+        policeEmployeeRepository.save(entity);
+        return policeEmployeeMapper.toResponse(entity);
     }
 
     @Override

@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Accessors(chain = true)
 public class PoliceReportRequest {
     Long eo;
-    Integer assignee;
+    Long assignee;
     String decision;
     String story;
     String declarant;
